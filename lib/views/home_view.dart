@@ -5,7 +5,7 @@ import 'package:myapp/views/equipos_view.dart';
 import 'package:myapp/views/diccionario_view.dart';
 import 'package:myapp/views/barra_de_navegacion.dart';
 import 'package:myapp/views/menu_bottom_sheet.dart';
-import 'package:myapp/views/chat_ia_contact.dart';
+import 'package:myapp/views/chat_ia_contact.dart'; 
 
 class HomeView extends StatefulWidget {
   const HomeView({
