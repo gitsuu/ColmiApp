@@ -42,7 +42,6 @@ class _ChatIAMsgViewState extends State<ChatIAMsgView> {
 
   Future<List<String>> _getImagesForWords(String message) async {
     List<String> images = [];
-    // Procesa la frase: 1 espacio = _, 2 espacios = separador
     final processedMessage =
         message.replaceAll('  ', '|'); // 2 espacios = separador
     final words =
@@ -76,7 +75,7 @@ class _ChatIAMsgViewState extends State<ChatIAMsgView> {
 
     final currentUserId = currentUser.uid;
     final backgroundAsset = Theme.of(context).brightness == Brightness.dark
-        ? 'assets/images/chat_background_dark.png'
+        ? 'assets/images/chat_dark.png'
         : 'assets/images/chat_background_light.png';
 
     return Scaffold(
@@ -85,11 +84,15 @@ class _ChatIAMsgViewState extends State<ChatIAMsgView> {
           Container(
             height: 70,
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_back, size: 28),
+                  icon: Icon(
+                    Icons.arrow_back,
+                    size: 28,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -120,7 +123,11 @@ class _ChatIAMsgViewState extends State<ChatIAMsgView> {
                             child: profileImage == null
                                 ? Text(
                                     widget.username[0].toUpperCase(),
-                                    style: const TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                    ),
                                   )
                                 : null,
                           );
@@ -129,10 +136,9 @@ class _ChatIAMsgViewState extends State<ChatIAMsgView> {
                       const SizedBox(width: 10),
                       Text(
                         widget.username,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -151,7 +157,7 @@ class _ChatIAMsgViewState extends State<ChatIAMsgView> {
               ),
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection('ia_chats') // Nueva colección para Chat IA
+                    .collection('ia_chats')
                     .doc(widget.chatId)
                     .collection('messages')
                     .orderBy('timestamp', descending: true)
@@ -163,8 +169,12 @@ class _ChatIAMsgViewState extends State<ChatIAMsgView> {
                     );
                   }
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                        child: Text('No hay mensajes, ¡envía el primero!'));
+                    return Center(
+                      child: Text(
+                        'No hay mensajes, ¡envía el primero!',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    );
                   }
 
                   final messages = snapshot.data!.docs;
@@ -202,11 +212,11 @@ class _ChatIAMsgViewState extends State<ChatIAMsgView> {
                 config: Config(
                   columns: 7,
                   emojiSizeMax: 32,
-                  bgColor: Colors.white,
+                  bgColor: Theme.of(context).colorScheme.surface,
                   enableSkinTones: true,
-                  iconColorSelected: Colors.blue,
+                  iconColorSelected: Theme.of(context).colorScheme.primary,
                   initCategory: Category.RECENT,
-                  emojiTextStyle: const TextStyle(fontSize: 20),
+                  emojiTextStyle: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
             ),
@@ -217,14 +227,14 @@ class _ChatIAMsgViewState extends State<ChatIAMsgView> {
                 final images = await _getImagesForWords(message);
 
                 await FirebaseFirestore.instance
-                    .collection('ia_chats') // Nueva colección para Chat IA
+                    .collection('ia_chats')
                     .doc(widget.chatId)
                     .collection('messages')
                     .add({
                   'senderId': currentUserId,
                   'receiverId': widget.username,
-                  'message': message, // Guarda el mensaje original
-                  'images': images, // Lista de imágenes correspondientes
+                  'message': message,
+                  'images': images,
                   'timestamp': FieldValue.serverTimestamp(),
                 });
                 messageController.clear();
@@ -262,7 +272,7 @@ class ChatBubble extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSentByUser
             ? Theme.of(context).colorScheme.primary.withOpacity(0.8)
-            : Theme.of(context).colorScheme.surfaceContainerHighest,
+            : Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.only(
           topLeft: const Radius.circular(10),
           topRight: const Radius.circular(10),
@@ -325,7 +335,10 @@ class _MessageInput extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.emoji_emotions),
+              icon: Icon(
+                Icons.emoji_emotions,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
               onPressed: onEmojiPressed,
             ),
             Expanded(
@@ -333,7 +346,7 @@ class _MessageInput extends StatelessWidget {
                 controller: controller,
                 decoration: InputDecoration(
                   hintText: 'Escribe un mensaje...',
-                  fillColor: Colors.grey[200],
+                  fillColor: Theme.of(context).colorScheme.surface,
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),

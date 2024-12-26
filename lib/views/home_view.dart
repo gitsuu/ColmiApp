@@ -53,7 +53,9 @@ class _HomeViewState extends State<HomeView> {
         title: Row(
           children: [
             Image.asset(
-              'assets/images/logo.png',
+              Theme.of(context).brightness == Brightness.dark
+                  ? 'assets/images/logo2.png' // Logo oscuro
+                  : 'assets/images/logo.png', // Logo claro
               height: 60,
             ),
             const SizedBox(width: 8),

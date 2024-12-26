@@ -65,6 +65,7 @@ class _ChatIAContactViewState extends State<ChatIAContactView> {
       appBar: AppBar(
         title: const Text('Contactos Chat IA'),
         centerTitle: true,
+        automaticallyImplyLeading: false, // Elimina el ícono de "back"
       ),
       body: contacts.isEmpty
           ? const Center(

@@ -97,6 +97,7 @@ flutter:
    - assets/icons_users/
    - assets/sentimientos/
    - assets/chat_ia/
+   - assets/images/chat_dark.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

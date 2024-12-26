@@ -77,7 +77,7 @@ class _ChatMsgViewState extends State<ChatMsgView> {
 
     final currentUserId = currentUser.uid;
     final backgroundAsset = Theme.of(context).brightness == Brightness.dark
-        ? 'assets/images/chat_background_dark.png'
+        ? 'assets/images/chat_dark.png'
         : 'assets/images/chat_background_light.png';
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -96,7 +96,9 @@ class _ChatMsgViewState extends State<ChatMsgView> {
               },
               child: Container(
                 width: contactPanelWidth,
-                color: Colors.grey.shade200,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[850]
+                    : Colors.grey.shade200,
                 child: ContactList(
                   onContactSelected: (username, selectedChatId) {
                     Navigator.of(context).pushReplacementNamed(
@@ -116,7 +118,7 @@ class _ChatMsgViewState extends State<ChatMsgView> {
                 Container(
                   height: 70,
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   child: Row(
                     children: [
                       IconButton(
@@ -162,10 +164,10 @@ class _ChatMsgViewState extends State<ChatMsgView> {
                             const SizedBox(width: 10),
                             Text(
                               receiverUsername,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
@@ -254,7 +256,7 @@ class _ChatMsgViewState extends State<ChatMsgView> {
                       config: Config(
                         columns: 7,
                         emojiSizeMax: 32,
-                        bgColor: Colors.white,
+                        bgColor: Theme.of(context).colorScheme.surface,
                         enableSkinTones: true,
                         iconColorSelected: Colors.blue,
                         initCategory: Category.RECENT,
@@ -308,7 +310,7 @@ class ChatBubble extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSentByUser
             ? Theme.of(context).colorScheme.primary.withOpacity(0.8)
-            : Theme.of(context).colorScheme.surfaceContainerHighest,
+            : Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.only(
           topLeft: const Radius.circular(10),
           topRight: const Radius.circular(10),
@@ -359,7 +361,7 @@ class _MessageInput extends StatelessWidget {
                 controller: controller,
                 decoration: InputDecoration(
                   hintText: 'Escribe un mensaje...',
-                  fillColor: Colors.grey[200],
+                  fillColor: Theme.of(context).colorScheme.surface,
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),

@@ -31,6 +31,10 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
     final String equipoId =
         ModalRoute.of(context)?.settings.arguments as String;
 
+    final backgroundAsset = Theme.of(context).brightness == Brightness.dark
+        ? 'assets/images/chat_dark.png'
+        : 'assets/images/chat_background_light.png';
+
     return Scaffold(
       body: Row(
         children: [
@@ -45,18 +49,15 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
               },
               child: Container(
                 width: miembrosWidth,
-                color: Colors.grey[200],
+                color: Theme.of(context).colorScheme.surface,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Text(
                         'Miembros',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ),
                     Expanded(
@@ -67,8 +68,12 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData || !snapshot.data!.exists) {
-                            return const Center(
-                                child: Text('Error al cargar los miembros.'));
+                            return Center(
+                              child: Text(
+                                'Error al cargar los miembros.',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            );
                           }
 
                           final equipoData =
@@ -78,8 +83,12 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                                   [];
 
                           if (participantes.isEmpty) {
-                            return const Center(
-                                child: Text('No hay miembros en este equipo.'));
+                            return Center(
+                              child: Text(
+                                'No hay miembros en este equipo.',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            );
                           }
 
                           return ListView.builder(
@@ -108,7 +117,12 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                                           ? const Icon(Icons.person)
                                           : null,
                                     ),
-                                    title: Text(username),
+                                    title: Text(
+                                      username,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
                                   );
                                 },
                               );
@@ -151,7 +165,10 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                               .get(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData || !snapshot.data!.exists) {
-                              return const Text('Equipo desconocido');
+                              return Text(
+                                'Equipo desconocido',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              );
                             }
 
                             final equipoData =
@@ -172,10 +189,7 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                                 const SizedBox(width: 8),
                                 Text(
                                   groupName,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ],
                             );
@@ -188,8 +202,12 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                         tooltip: 'Videollamada',
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Función no implementada.')),
+                            SnackBar(
+                              content: Text(
+                                'Función no implementada.',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -198,8 +216,12 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                         tooltip: 'Llamada',
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Función no implementada.')),
+                            SnackBar(
+                              content: Text(
+                                'Función no implementada.',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -208,10 +230,9 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                 ),
                 Expanded(
                   child: Container(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(
-                            'assets/images/chat_background_light.png'),
+                        image: AssetImage(backgroundAsset),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -224,8 +245,12 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                          return const Center(
-                              child: Text('No hay mensajes en este equipo.'));
+                          return Center(
+                            child: Text(
+                              'No hay mensajes en este equipo.',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          );
                         }
 
                         final mensajes = snapshot.data!.docs;
@@ -268,7 +293,9 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                               controller: messageController,
                               decoration: InputDecoration(
                                 hintText: 'Escribe un mensaje...',
-                                fillColor: Colors.grey[200],
+                                fillColor: Theme.of(context)
+                                    .colorScheme
+                                    .surfaceVariant,
                                 filled: true,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -314,7 +341,7 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                             config: Config(
                               columns: 8,
                               emojiSizeMax: 32,
-                              bgColor: Colors.grey[200]!,
+                              bgColor: Theme.of(context).colorScheme.surface,
                               iconColorSelected:
                                   Theme.of(context).colorScheme.primary,
                             ),
@@ -369,20 +396,23 @@ class ChatBubble extends StatelessWidget {
             children: [
               Text(
                 senderName,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: isSentByUser ? Colors.teal[300] : Colors.grey[300],
+                  color: isSentByUser
+                      ? Theme.of(context).colorScheme.primaryContainer
+                      : Theme.of(context).colorScheme.surfaceVariant,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   text,
-                  style: const TextStyle(color: Colors.black),
+                  style: TextStyle(
+                    color: isSentByUser
+                        ? Theme.of(context).colorScheme.onPrimaryContainer
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
             ],

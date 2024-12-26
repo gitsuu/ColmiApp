@@ -19,57 +19,96 @@ class AnimalesView extends StatelessWidget {
       {'animal': 'Pescado', 'imagen': 'assets/animales/pescado_sign.png'},
       {'animal': 'Serpiente', 'imagen': 'assets/animales/serpiente_sign.png'},
       {'animal': 'Tigre', 'imagen': 'assets/animales/tigre_sign.png'},
-      // Agrega más animales aquí
     ];
 
-    // Detectar el ancho de la pantalla para ajustar el número de columnas
-    final screenWidth = MediaQuery.of(context).size.width;
-    int crossAxisCount = 2;
-    if (screenWidth >= 720) {
-      crossAxisCount = 4;
-    }
-
     return Scaffold(
-      appBar: AppBar(title: const Text("Animales")),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 20,
+      appBar: AppBar(
+        title: const Text("Animales"),
+      ),
+      body: Stack(
+        children: [
+          // Fondo dinámico según el tema
+          Positioned.fill(
+            child: Image.asset(
+              Theme.of(context).brightness == Brightness.dark
+                  ? 'assets/logos/diccionario_night.png'
+                  : 'assets/logos/diccionario_background.png',
+              fit: BoxFit.cover,
+            ),
           ),
-          itemCount: animales.length,
-          itemBuilder: (context, index) {
-            final animal = animales[index]['animal']!;
-            final imagen = animales[index]['imagen']!;
-            return FlipCard(
-              front: _buildCardFace(animal, Colors.green, 150, 120),
-              back: _buildCardFace(Image.asset(imagen),
-                  const Color.fromARGB(255, 255, 255, 255), 150, 120),
-            );
-          },
-        ),
-      ),
-    );
-  }
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final crossAxisCount = constraints.maxWidth > 720 ? 4 : 2;
 
-  Widget _buildCardFace(
-      dynamic content, Color color, double width, double height) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Center(
-        child: content is String
-            ? Text(
-                content,
-                style: const TextStyle(fontSize: 30, color: Colors.white),
-              )
-            : content,
+                return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
+                  ),
+                  itemCount: animales.length,
+                  itemBuilder: (context, index) {
+                    final animal = animales[index]['animal']!;
+                    final imagen = animales[index]['imagen']!;
+
+                    return FlipCard(
+                      front: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.grey[800]
+                              : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(16.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 8.0,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Text(
+                            animal,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black87,
+                            ),
+                          ),
+                        ),
+                      ),
+                      back: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 8.0,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            imagen,
+                            height: 100.0,
+                            width: 100.0,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

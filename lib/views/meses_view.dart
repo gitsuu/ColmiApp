@@ -22,57 +22,92 @@ class MesesView extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Meses")),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          // Determina el número de columnas basado en el ancho disponible
-          final crossAxisCount = constraints.maxWidth > 600 ? 4 : 2;
-
-          return Padding(
+      appBar: AppBar(
+        title: const Text("Meses"),
+      ),
+      body: Stack(
+        children: [
+          // Fondo dinámico según el tema
+          Positioned.fill(
+            child: Image.asset(
+              Theme.of(context).brightness == Brightness.dark
+                  ? 'assets/logos/diccionario_night.png'
+                  : 'assets/logos/diccionario_background.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-              ),
-              itemCount: meses.length,
-              itemBuilder: (context, index) {
-                final mes = meses[index]['mes']!;
-                final imagen = meses[index]['imagen']!;
-                return FlipCard(
-                  front: _buildCardFace(mes, Colors.orange, 150, 120),
-                  back: _buildCardFace(
-                    Image.asset(imagen),
-                    const Color.fromARGB(255, 255, 255, 255),
-                    150,
-                    120,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final crossAxisCount = constraints.maxWidth > 600 ? 4 : 2;
+
+                return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
                   ),
+                  itemCount: meses.length,
+                  itemBuilder: (context, index) {
+                    final mes = meses[index]['mes']!;
+                    final imagen = meses[index]['imagen']!;
+
+                    return FlipCard(
+                      front: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.grey[800]
+                              : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(16.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 8.0,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Text(
+                            mes,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black87,
+                            ),
+                          ),
+                        ),
+                      ),
+                      back: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 8.0,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            imagen,
+                            height: 100.0,
+                            width: 100.0,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildCardFace(
-      dynamic content, Color color, double width, double height) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Center(
-        child: content is String
-            ? Text(
-                content,
-                style: const TextStyle(fontSize: 30, color: Colors.white),
-              )
-            : content,
+          ),
+        ],
       ),
     );
   }
