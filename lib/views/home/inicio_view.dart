@@ -6,7 +6,7 @@ class InicioView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
+    final isMobile = screenWidth < 601;
 
     return Scaffold(
       body: SafeArea(
