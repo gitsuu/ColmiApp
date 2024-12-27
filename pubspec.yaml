@@ -41,6 +41,7 @@ dependencies:
   cloud_firestore: ^5.5.1
   emoji_picker_flutter: ^1.2.0
   flutter_emoji: ^2.5.1
+  google_fonts: ^6.2.1
   
 
 
@@ -98,6 +99,7 @@ flutter:
    - assets/sentimientos/
    - assets/chat_ia/
    - assets/images/chat_dark.png
+   - assets/home/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
