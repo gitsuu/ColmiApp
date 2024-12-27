@@ -63,7 +63,7 @@ class _ChatIAContactViewState extends State<ChatIAContactView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contactos Chat IA'),
+        title: const Text('Chat IA Beta'),
         centerTitle: true,
         automaticallyImplyLeading: false, // Elimina el ícono de "back"
       ),

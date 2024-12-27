@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'ChatApp-0.1.0',
+      title: 'Colmi',
       theme: _updateTheme(useLightMode, colorSelected),
       initialRoute: '/inicio', // Siempre ir al login al iniciar
       routes: {

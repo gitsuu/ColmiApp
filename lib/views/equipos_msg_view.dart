@@ -295,7 +295,7 @@ class _EquipoMsgViewState extends State<EquipoMsgView> {
                                 hintText: 'Escribe un mensaje...',
                                 fillColor: Theme.of(context)
                                     .colorScheme
-                                    .surfaceVariant,
+                                    .surfaceContainerHighest,
                                 filled: true,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -403,7 +403,7 @@ class ChatBubble extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSentByUser
                       ? Theme.of(context).colorScheme.primaryContainer
-                      : Theme.of(context).colorScheme.surfaceVariant,
+                      : Theme.of(context).colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(

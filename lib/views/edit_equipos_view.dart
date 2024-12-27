@@ -37,6 +37,11 @@ class EditEquiposView extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 10),
+                Text(
+                  'Miembros:',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 10),
                 Expanded(
                   child: participantes.isEmpty
                       ? const Center(
@@ -89,13 +94,25 @@ class EditEquiposView extends StatelessWidget {
                         ),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
+                Center(
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 24,
+                      ),
+                    ),
+                    icon: const Icon(Icons.delete, color: Colors.white),
+                    label: const Text(
+                      'Eliminar equipo',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    onPressed: () => _confirmDeleteEquipo(context),
                   ),
-                  icon: const Icon(Icons.delete),
-                  label: const Text('Eliminar equipo'),
-                  onPressed: () => _confirmDeleteEquipo(context),
                 ),
               ],
             ),

@@ -92,58 +92,76 @@ class UsernameView extends StatelessWidget {
 
   Widget _buildWebView(BuildContext context, TextEditingController controller,
       String currentUsername) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 500),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Nombre de usuario actual: $currentUsername',
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(
+          Icons.person,
+          size: 100,
+          color: Colors.grey,
+        ),
+        const SizedBox(height: 20),
+        Card(
+          elevation: 4,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 500),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Nombre de usuario actual:',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    currentUsername,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      labelText: 'Nuevo nombre de usuario',
+                      border: const OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.surface,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      final newUsername = controller.text.trim();
+                      if (newUsername.isNotEmpty) {
+                        _showConfirmationDialog(context, newUsername);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'Por favor, ingresa un nombre de usuario válido'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text('Guardar'),
+                  ),
+                ],
               ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: controller,
-                decoration: const InputDecoration(
-                  labelText: 'Nuevo nombre de usuario',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  final newUsername = controller.text.trim();
-                  if (newUsername.isNotEmpty) {
-                    _showConfirmationDialog(context, newUsername);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            'Por favor, ingresa un nombre de usuario válido'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
-                child: const Text('Guardar'),
-              ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 
   Widget _buildMobileView(BuildContext context,
       TextEditingController controller, String currentUsername) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Card(
           margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -153,19 +171,26 @@ class UsernameView extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Nombre de usuario actual: $currentUsername',
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
+                  'Nombre de usuario actual:',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  currentUsername,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 20),
                 TextField(
                   controller: controller,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Nuevo nombre de usuario',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Theme.of(context).colorScheme.surface,
                   ),
                 ),
                 const SizedBox(height: 20),

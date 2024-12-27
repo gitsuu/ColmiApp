@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/services.dart'; // Necesario para rootBundle
+import 'dart:async';
 
 class ChatIAMsgView extends StatefulWidget {
   final String username;
@@ -300,17 +301,87 @@ class ChatBubble extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: images.map((image) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    image,
-                    height: 100,
-                    fit: BoxFit.contain,
-                  ),
-                );
+                return ZoomableImage(imagePath: image);
               }).toList(),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class ZoomableImage extends StatefulWidget {
+  final String imagePath;
+
+  const ZoomableImage({super.key, required this.imagePath});
+
+  @override
+  _ZoomableImageState createState() => _ZoomableImageState();
+}
+
+class _ZoomableImageState extends State<ZoomableImage>
+    with SingleTickerProviderStateMixin {
+  bool _isZoomed = false;
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _animation = Tween<double>(begin: 1.0, end: 2.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTap() {
+    if (!_isZoomed) {
+      setState(() {
+        _isZoomed = true;
+      });
+      _controller.forward();
+
+      Timer(const Duration(seconds: 2), () {
+        if (mounted) {
+          _controller.reverse().then((_) {
+            setState(() {
+              _isZoomed = false;
+            });
+          });
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _onTap,
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _animation.value,
+            child: child,
+          );
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.asset(
+            widget.imagePath,
+            height: 100,
+            fit: BoxFit.contain,
+          ),
+        ),
       ),
     );
   }

@@ -120,6 +120,7 @@ class EditContactView extends StatelessWidget {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) return;
 
+      // Buscar contacto en la lista del usuario actual
       final contactQuery = await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
@@ -129,12 +130,58 @@ class EditContactView extends StatelessWidget {
 
       if (contactQuery.docs.isNotEmpty) {
         final contactId = contactQuery.docs.first.id;
+
+        // Eliminar contacto de la lista del usuario actual
         await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
             .collection('contacts')
             .doc(contactId)
             .delete();
+
+        // Buscar al otro usuario por su username
+        final otherUserQuery = await FirebaseFirestore.instance
+            .collection('users')
+            .where('username', isEqualTo: username)
+            .get();
+
+        if (otherUserQuery.docs.isNotEmpty) {
+          final otherUserId = otherUserQuery.docs.first.id;
+
+          // Eliminar al usuario actual de la lista del otro usuario
+          final reverseContactQuery = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(otherUserId)
+              .collection('contacts')
+              .where('username', isEqualTo: user.displayName)
+              .get();
+
+          if (reverseContactQuery.docs.isNotEmpty) {
+            final reverseContactId = reverseContactQuery.docs.first.id;
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(otherUserId)
+                .collection('contacts')
+                .doc(reverseContactId)
+                .delete();
+          }
+
+          // Eliminar el chat entre ambos usuarios
+          final chatQuery = await FirebaseFirestore.instance
+              .collection('chats')
+              .where('participants', arrayContains: user.uid)
+              .get();
+
+          for (var chatDoc in chatQuery.docs) {
+            final participants = chatDoc['participants'] as List;
+            if (participants.contains(otherUserId)) {
+              await FirebaseFirestore.instance
+                  .collection('chats')
+                  .doc(chatDoc.id)
+                  .delete();
+            }
+          }
+        }
 
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
